@@ -202,21 +202,12 @@ def main():
     predict_result = predict_by_model(model_info, calculated_discount)
 
     # -------------------------- 关键修改：结果展示区（实现3个需求） --------------------------
-    st.header(
-    f"📊 推荐结果（模型推荐罐单：<span class='recommend-price'>{recommended_price:.2f}元</span>）",
-    unsafe_allow_html
-    =True  # 允许HTML样式
-)
-
-    # 1. 区分“输入罐单价”和“模型推荐罐单价”（推荐罐单价=RSP*(1-最优折扣率)）
+    # 先定义推荐罐单价（避免重复定义）
     recommended_price = fixed_rsp * (1 - model_info['optimal_discount'])  # 模型推荐的最优罐单价
-
-    # 2. 新增“预测退款率”展示，调整布局为4列
-    col1, col2, col3, col4 = st.columns(4)
-    col1.metric(
-        "公式计算折扣率",
-        f"{predict_result['discount']:.2%}",
-        help=f"计算逻辑：1 - ({input_price:.2f}/{fixed_rsp:.2f})"
+    # 修复 st.header 语法错误
+    st.header(
+        f"📊 推荐结果（模型推荐罐单：<span class='recommend-price'>{recommended_price:.2f}元</span>）",
+        unsafe_allow_html=True  # 正确的关键字参数格式
     )
     col2.metric(
         "输入罐单价（元）",
@@ -283,3 +274,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
